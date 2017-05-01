@@ -68,4 +68,4 @@ to start the program on systemd systems, so maybe don't use that one if you aren
 
 ## Just keep in mind...
 
-You don't need to use it, but you can if they want to.
+You don't need to use it, but you can if you want to.
