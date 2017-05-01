@@ -57,7 +57,8 @@ dependencies from programs. I mean, I appreciate when a program offers an option
 systemd, but it's annoying to do so nonetheless. This is where this library comes into play. An library
 or application can link against this library without changing any of it's code and will refuse to start
 the application on a systemd system unless configured otherwise. The systemd user can then experience
-the pain to recompile the application without fuck-systemd that so many non-systemd users know so well.
+the pain to recompile the application without fuck-systemd that so many non-systemd users know so well
+from systemd.
 
 ## How to build
 
