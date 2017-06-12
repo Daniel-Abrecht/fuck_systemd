@@ -15,7 +15,16 @@ are written in a somewhat stable way. And no, a service must be able to handle w
 is temporarily unavailable, that's nothing a service manager should do, that would only make services
 unstable.
 
-> libsystemd0 doesn't depend on systemd, so it's fine
+> libsystemd0 is a noop without systemd, it won't break or do anything without it
+
+It does break things. I mean, what do you expect to happens when you just remove any functionality from a library?
+It's even worse than returning errors, because it just silently fails. Look at the sd_journal_* functions for
+example. It replaces syslog which causes any logging service to become incompatible with applications using
+this useless new API. Of course, they don't put this functionality it in a distinct library, and they don't
+fallback to syslog if systemd is unavailable. In other words: If an application uses sd_journal_* functions for
+logging, it won't log anything on systems without systemd!
+
+> libsystemd0 doesn't depend on systemd
 
 No, it isn't. just because it doesn't depend on it yet doesn't mean it won't in the future. Honestly
 there are worse things than libsystemd0. Look at systemd-udevd for example, udev is a core linux
