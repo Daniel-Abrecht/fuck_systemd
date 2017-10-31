@@ -9,7 +9,7 @@ things have been merged into systemd, too many things depend on it. Take libsyst
 the same library contains, among other things, functions to notify systemd about service state
 changes (sd_notify), and functions to log messages using journalctl (sd_journal_send). Those
 are some completely unrelated things which belong into different libraries, so they can be replaced
-easily. Not to mention, there is a standardized logging function interface available using syslog.h
+easily. Not to mention, there is a standardized logging function interface available using syslog
 which is implemented by a lot of logging libraries, and sd_notify is totally useless if all services
 are written in a somewhat stable way. And no, a service must be able to handle when another service
 is temporarily unavailable, that's nothing a service manager should do, that would only make services
@@ -20,13 +20,13 @@ unstable.
 It does break things. I mean, what do you expect to happens when you just remove any functionality from a library?
 It's even worse than returning errors, because it just silently fails. Look at the sd_journal_* functions for
 example. It replaces syslog which causes any logging service to become incompatible with applications using
-this useless new API. Of course, they don't put this functionality it in a distinct library, and they don't
+this useless new API. Of course, they don't put this functionality in a distinct library, and they don't
 fallback to syslog if systemd is unavailable. In other words: If an application uses sd_journal_* functions for
 logging, it won't log anything on systems without systemd!
 
-> libsystemd0 doesn't depend on systemd
+> libsystemd0 doesn't depend on systemd, so it's fine
 
-No, it isn't. just because it doesn't depend on it yet doesn't mean it won't in the future. Honestly
+No, it isn't. Just because it doesn't depend on it yet doesn't mean it won't in the future. Honestly
 there are worse things than libsystemd0. Look at systemd-udevd for example, udev is a core linux
 service for populating /dev/ and reacting to device changes. Why the hell was it merged into systemd!?!
 Sure, we got that into control, with devtempfs, eudev and vdev, we have an escape plan for this. But
